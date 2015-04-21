@@ -32,6 +32,7 @@ import android.content.Intent;
 
 
 public class MemoryGame extends Activity {
+    //static variables of row and comment length
     private static int ROW = -1;
     private static int COL = -1;
 
@@ -40,7 +41,10 @@ public class MemoryGame extends Activity {
     private UpdateHandler handler;
     //public List<Integer> cardIds = new ArrayList<Integer>();
     private List<Card> cardList = new ArrayList<Card>();
+    
+    //array list of card images
     List<Drawable> cardBacks = new ArrayList<Drawable>();
+    
     List<ImageButton> buttonList = new ArrayList<ImageButton>();
 
     private Context context;
@@ -51,8 +55,11 @@ public class MemoryGame extends Activity {
     private Card selection1;
     private Card selection2;
 
+    //game type
     private int mode;
+    //attempted tries
     private int tries;
+    //# of matched cards
     private int totalMatches;
     long seed = System.nanoTime();
 
@@ -64,19 +71,25 @@ public class MemoryGame extends Activity {
 
         //to be used to distinguish what game mode is selected
         mode = getIntent().getIntExtra("mode", 0);
-        //mode = getIntent().getStringExtra("mode", 0);
+        //mode = getIntent().getStringExtra("mode", 0);     alternative method of passing intent
+        
+        //handler which updates card status and checks for match
         handler = new UpdateHandler();
 
         setContentView(R.layout.activity_memory_game);
+        
         // setcontentview again?
+        
         backPic = getResources().getDrawable(R.drawable.au);
 
+        // new buttonlistener for when a card is selected
         buttonListener = new ButtonListener();
 
         gameBoard = (TableLayout)findViewById(R.id.TableLayout01);
 
         context = gameBoard.getContext();
 
+        //Spinner selection for difficulty determines what size game board
         Spinner spinner = (Spinner) findViewById(R.id.sizeSpinner);
             ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -109,12 +122,15 @@ public class MemoryGame extends Activity {
 
             @Override
             public void onNothingSelected(AdapterView<?> a) {
-
+                //default
             }
         });
 
     }
-
+    /**
+     * handler maintains game and whether card's have been correctly matched
+     * 
+     * */
     class UpdateHandler extends Handler {
 
         @Override
@@ -125,12 +141,17 @@ public class MemoryGame extends Activity {
         }
         public void checkMatch () {
             if(selection1.equals(selection2)) {
+                
+                //set both cards as being matched
                 selection1.setMatch();
-                //selection2.turnOver();
                 selection2.setMatch();
+                
+                //call card method to turn face down which will make invisible when matched
                 selection1.faceDown();
                 selection2.faceDown();
                 totalMatches++;
+                
+                //check to see if game completed
                 if (totalMatches == ((ROW*COL)/2)) {
                     Toast.makeText(context, "Congratulations! You win!", Toast.LENGTH_SHORT).show();
 
@@ -146,7 +167,7 @@ public class MemoryGame extends Activity {
                 }
             }
             else {
-
+                //no match, turn cards back over, set selections to null
                 selection1.faceDown();
                 selection2.faceDown();
             }
@@ -156,7 +177,10 @@ public class MemoryGame extends Activity {
 
 
     }
-
+    /**
+     * initialize settings based on spinner selection
+     * 
+     * */
     private void loadPictures(int case1) {
 
         switch(case1) {
@@ -201,12 +225,18 @@ public class MemoryGame extends Activity {
 
 
 
+    /**
+     * initialize game board
+     * 
+     * */
     private void initialize(int c, int r, int mode) {
         ROW = r;
         COL = c;
 
+        //remove TableRow containing spinner
         gameBoard.removeView(findViewById(R.id.TableRow01));
 
+        //Add Table row which will contain array and columns of table layouts of views (Image Buttons)
         TableRow newRow = ((TableRow)findViewById(R.id.TableRow02));
         newRow.removeAllViews();
 
@@ -214,35 +244,48 @@ public class MemoryGame extends Activity {
 
         newRow.addView(gameBoard);
 
+        //List of created cards
         cardList.clear();
-        //double check this
+        
+        //no card has been selectd
         selection1 = null;
-
-
+        
+        //shuffle arraylist of images
         Collections.shuffle(cardBacks, new Random(seed));
 
-
+        //add view of new row to tablelayout based on number of rows
         for (int i =0; i < ROW; i++) {
             gameBoard.addView(addRow(i));
         }
 
         selection1 = null;
 
+        //intialize attempts
         tries = 0;
+        //counter of total tries
         ((TextView)findViewById(R.id.textTries)).setText("Total Turns: "+ tries);
     }
+    /**
+     * adds a row
+     * returns TableRow
+     * */
     private TableRow addRow(int x) {
         TableRow row = new TableRow(context);
 
         row.setHorizontalGravity(Gravity.CENTER);
-
+        
+        // create button and add to row based on column index
         for (int i = 0; i < COL; i++) {
             ImageButton button = new ImageButton(context);
+            //index will match card id, for now. going to change randomization
             int index = x * COL + i;
+            
             button.setId(index);
             button.setOnClickListener(buttonListener);
+            //possibly not needed?
             buttonList.add(button);
             row.addView(button);
+            //important, creates a card using this newly created button and passed index to be used as id
             createCard(button, index);
         }
         return row;
@@ -250,14 +293,22 @@ public class MemoryGame extends Activity {
     public void createCard(ImageButton button, int index) {
         int size = ROW * COL;
         int i;
+        //because there will only be size/2 images, index for two cards will be identical
+        //when determined this way, after shuffling the List of images 
         if (index >= size/2)
             i = index - size/2;
         else
             i = index;
 
+        //create card with button, drawable, and id as parameters
         Card card1 = new Card(button, cardBacks.get(i), i);
         cardList.add(card1);
     }
+    
+    /**
+     * Listener takes action when button pressed
+     * 
+     * */
     class ButtonListener implements OnClickListener {
 
         @Override
@@ -276,19 +327,25 @@ public class MemoryGame extends Activity {
         }
 
         private void turnFaceUp(ImageButton button, int id) {
+            //first button pressed, button id matches card id, turnover card to see image
             if(selection1 == null) {
                 selection1 = cardList.get(id);
-                tries++;
                 selection1.turnOver();
+                
+                /* eliminated for more logical method of determing attempts
+                tries++;
                 ((TextView)findViewById(R.id.textTries)).setText("Total Turns: "+ tries);
+                */
             } else {
+                //second card selection turn over card and allow handler to determine match
                 selection2 = cardList.get(id);
                 tries++;
                 selection2.turnOver();
 
                 ((TextView)findViewById(R.id.textTries)).setText("Total Turns: "+ tries);
                 TimerTask task = new TimerTask() {
-
+                
+                //ensures user has ample time to see both card images before game determines whether they match
                     @Override
                     public void run() {
                         try {
