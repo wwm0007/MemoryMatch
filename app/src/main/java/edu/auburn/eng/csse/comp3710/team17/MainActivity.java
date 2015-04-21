@@ -10,7 +10,7 @@ import android.view.View;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    //two game modes, pass integer with intent depending on button pressed
     Button classicButton;
     Button timedButton;
 
