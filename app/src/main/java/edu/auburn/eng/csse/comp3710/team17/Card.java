@@ -10,11 +10,14 @@ import android.view.View;
 
 public class Card {
 
-
+    //button of card displays image
     public ImageButton button;
     private int index;
+    //whether card has been matched in game
     private boolean match;
+    //id used to determine if cards are identical
     private int id;
+    //back image received when creating card
     private Drawable back;
 
 
@@ -31,27 +34,39 @@ public class Card {
         this.faceDown();
 
     }
-
+    /**
+     * getter of button
+     * returns card's button
+     * */
     public ImageButton getButton() {
         return this.button;
     }
-
+    /**
+     * turns card face down
+     * if a match, make invisible, else change image to back
+     * */
     public void faceDown() {
         if (!this.match) {
-            this.button.setBackgroundResource(R.drawable.ic_launcher);
+            this.button.setBackgroundResource(R.drawable.au);
         } else {
-            this.button.setBackgroundResource(R.drawable.ic_launcher);
+            this.button.setBackgroundResource(R.drawable.au);
             this.button.setVisibility(View.INVISIBLE);
         }
     }
-
+    /**
+     * determines if two cards are identical
+     * returns true or false
+     * */
     public boolean equals(Card card2) {
         return this.id == card2.getId();
     }
 
+    /**
+     * turn card over to reveal the image
+     * 
+     * */
     public void turnOver() {
-        //used setBackgroundDrawable android says thats deprecated,
-        // vs setBackground .
+        
         if (android.os.Build.VERSION.SDK_INT >= 16)
             this.button.setBackground(back);
         else
@@ -59,11 +74,17 @@ public class Card {
 
     }
 
-
+    /**
+     * getter of card id
+     * returns card's id
+     * */
     public int getId() {
         return id;
     }
-
+    /**
+     * setter of boolean status matched
+     * 
+     * */
     public void setMatch() {
         this.match = true;
     }
