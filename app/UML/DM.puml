@@ -1,0 +1,18 @@
+@startuml
+title MemoryMatch Use Case
+left to right direction
+actor user
+rectangle {
+usecase "select game mode"
+usecase "select difficulty"
+usecase "play game"
+usecase "submit score"
+user -- (select game mode)
+user -- (select difficulty)
+user -- (play game)
+user -- (submit score)
+(play game) .> (choose card) : <<includes>>
+(choose card) .> (choose first card) : <<includes>>
+(choose card) .> (choose second card) : <<includes>>
+}
+@enduml
