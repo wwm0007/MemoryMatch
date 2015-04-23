@@ -1,0 +1,115 @@
+@startuml
+salt
+{
+{T
++ Select game mode
+++  Goal
++++ To choose which game mode will be played
+++ Entry conditions
++++ The user has started the app
+++ Scenario
++++ The opening menu is displayed
++++ User selects a game mode
+++ Exit conditions
++++ Successful Exit Conditions
+++++ Game mode chosen
+++++ Move to next menu screen
++++ Failure Exit Conditions
+++++ Unable to select game mode
+}
+---
+{T
++ Select difficulty
+++  Goal
++++ To choose the difficulty of the game
+++ Entry conditions
++++ The user has selected a game mode (sub-use)
+++ Scenario
++++ The difficulty menu is displayed
++++ User selects difficulty from menu
++++ Game board is then displayed
+++ Exit conditions
++++ Successful Exit Conditions
+++++ Correct size board is displayed
++++ Failure Exit Conditions
+++++ Incorrect size board is displayed
+}
+---
+{T
++ Play game
+++  Goal
++++ To choose cards and try to match each
+++++ of them to their single other match
+++ Entry conditions
++++ The user has chosen a game mode and difficulty
+++ Scenario
++++ The game board is displayed
++++ User chooses first card (sub-use)
++++ User chooses second card (sub-use)
+++ Exceptions
++++ One or more cards do not have matches
+++ Exit conditions
++++ Successful Exit Conditions
+++++ All cards have been matched
++++ Failure Exit Conditions
+++++ All cards cannot be matched
+}
+---
+{T
++ Choose first card
+++  Goal
++++ To choose the first card to be revealed
+++ Entry conditions
++++ The user has started the game
+++ Scenario
++++ The current game board is displayed with all cards face down
++++ User chooses one card to reveal
+++ Exceptions
++++ No cards left to choose but game doesn't end
+++ Exit conditions
++++ Successful Exit Conditions
+++++ Card successfully chosen
++++ Failure Exit Conditions
+++++ No cards to be chosen, nothing to be done
+}
+---
+{T
++ Choose second card
+++  Goal
++++ To choose the second card of the pair
+++ Entry conditions
++++ The user has successfully chosen the first card to reveal
+++ Scenario
++++ The current game board is displayed with one card face up
++++ User selects second card to reveal
+++ Exceptions
++++ No cards are left to reveal
+++ Exit conditions
++++ Successful Exit Conditions
+++++ Card chosen is a match and both cards are removed
+++++ Card chosen isn't a match and both cards a flipped back over
++++ Failure Exit Conditions
+++++ There is no second card to be chosen, nothing to be done
+}
+--
+{T
++ Submit score
+++  Goal
++++ To add the current score to the high score list
+++ Entry conditions
++++ The user has successfully completed a game
+++ Scenario
++++ Scoreboard is displayed with user's score
++++ The user enters initials to save with high score
+++ Exceptions
++++ Scoreboard not retrieved properly
+++ Exit conditions
++++ Successful Exit Conditions
+++++ User's current score is added to the high score list and is saved
+++++ User's current score not high enough to go on high score list
++++++ and is returned to the main menu
++++ Failure Exit Conditions
+++++ User's high score is not successfully saved to the high score list
+}
+}
+@enduml
