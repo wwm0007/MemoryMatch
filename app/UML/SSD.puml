@@ -1,0 +1,24 @@
+@startuml
+title MemoryMatch SSD
+
+User -> MemoryMatchApp : start
+User <-- MemoryMatchApp : display start menu
+User -> MemoryMatchApp : select game mode
+User -> MemoryMatchApp : select difficulty
+User <-- MemoryMatchApp : game board
+loop until all cards matched
+User -> MemoryMatchApp: select first card
+User <-- MemoryMatchApp : first card image
+User -> MemoryMatchApp : select second card
+User <-- MemoryMatchApp : second card image
+alt cards match
+User <-- MemoryMatchApp : removed cards
+else cards do not match
+User <-- MemoryMatchApp : turned over cards
+end
+end
+User -> MemoryMatchApp : submit score
+User <-- MemoryMatchApp : top scores
+
+
+@enduml
