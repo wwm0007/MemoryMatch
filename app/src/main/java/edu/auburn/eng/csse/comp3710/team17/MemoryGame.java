@@ -43,7 +43,7 @@ public class MemoryGame extends Activity {
     private List<Card> cardList = new ArrayList<Card>();
     
     //array list of card images
-    List<Drawable> cardBacks = new ArrayList<Drawable>();
+    List<Integer> cardBacks = new ArrayList<Integer>();
     
     List<ImageButton> buttonList = new ArrayList<ImageButton>();
 
@@ -185,36 +185,63 @@ public class MemoryGame extends Activity {
 
         switch(case1) {
             case 1:
-                cardBacks.add(getResources().getDrawable(R.drawable.gus));
-                cardBacks.add(getResources().getDrawable(R.drawable.nova));
-                cardBacks.add(getResources().getDrawable(R.drawable.sam));
-                cardBacks.add(getResources().getDrawable(R.drawable.stadium));
-                cardBacks.add(getResources().getDrawable(R.drawable.aubie));
-                cardBacks.add(getResources().getDrawable(R.drawable.bo));
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
+
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
 
                 break;
             case 2:
-                cardBacks.add(getResources().getDrawable(R.drawable.gus));
-                cardBacks.add(getResources().getDrawable(R.drawable.nova));
-                cardBacks.add(getResources().getDrawable(R.drawable.sam));
-                cardBacks.add(getResources().getDrawable(R.drawable.stadium));
-                cardBacks.add(getResources().getDrawable(R.drawable.aubie));
-                cardBacks.add(getResources().getDrawable(R.drawable.bo));
-                cardBacks.add(getResources().getDrawable(R.drawable.bruce));
-                cardBacks.add(getResources().getDrawable(R.drawable.cam));
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
+                cardBacks.add(R.drawable.bruce);
+                cardBacks.add(R.drawable.cam);
+
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
+                cardBacks.add(R.drawable.bruce);
+                cardBacks.add(R.drawable.cam);
 
                 break;
             case 3:
-                cardBacks.add(getResources().getDrawable(R.drawable.gus));
-                cardBacks.add(getResources().getDrawable(R.drawable.nova));
-                cardBacks.add(getResources().getDrawable(R.drawable.sam));
-                cardBacks.add(getResources().getDrawable(R.drawable.stadium));
-                cardBacks.add(getResources().getDrawable(R.drawable.aubie));
-                cardBacks.add(getResources().getDrawable(R.drawable.bo));
-                cardBacks.add(getResources().getDrawable(R.drawable.bruce));
-                cardBacks.add(getResources().getDrawable(R.drawable.cam));
-                cardBacks.add(getResources().getDrawable(R.drawable.logo));
-                cardBacks.add(getResources().getDrawable(R.drawable.charles));
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
+                cardBacks.add(R.drawable.bruce);
+                cardBacks.add(R.drawable.cam);
+                cardBacks.add(R.drawable.logo);
+                cardBacks.add(R.drawable.charles);
+
+                cardBacks.add(R.drawable.gus);
+                cardBacks.add(R.drawable.nova);
+                cardBacks.add(R.drawable.sam);
+                cardBacks.add(R.drawable.stadium);
+                cardBacks.add(R.drawable.aubie);
+                cardBacks.add(R.drawable.bo);
+                cardBacks.add(R.drawable.bruce);
+                cardBacks.add(R.drawable.cam);
+                cardBacks.add(R.drawable.logo);
+                cardBacks.add(R.drawable.charles);
 
                 break;
             default:
@@ -282,7 +309,7 @@ public class MemoryGame extends Activity {
             
             button.setId(index);
             button.setOnClickListener(buttonListener);
-            //possibly not needed?
+            //adding to buttonlist possibly not needed?
             buttonList.add(button);
             row.addView(button);
             //important, creates a card using this newly created button and passed index to be used as id
@@ -291,17 +318,10 @@ public class MemoryGame extends Activity {
         return row;
     }
     public void createCard(ImageButton button, int index) {
-        int size = ROW * COL;
-        int i;
-        //because there will only be size/2 images, index for two cards will be identical
-        //when determined this way, after shuffling the List of images 
-        if (index >= size/2)
-            i = index - size/2;
-        else
-            i = index;
-
+        int drawId = cardBacks.get(index);
         //create card with button, drawable, and id as parameters
-        Card card1 = new Card(button, cardBacks.get(i), i);
+        Card card1 = new Card(button, drawId, getResources().getDrawable(drawId));
+        // the index of this card in the cardlist will correspond to the id assigned to its button.
         cardList.add(card1);
     }
     
