@@ -21,13 +21,13 @@ public class Card {
     private Drawable back;
 
 
-
-    public Card(ImageButton button, Drawable cb, int index) {
+    //creating a card takes parameters of the card's button, its image, and the drawableId which will be the card's Id as well.
+    public Card(ImageButton button, int drawId, Drawable backImage) {
 
         match = false;
-        this.id = index;
+        this.id = drawId;
 
-        back = cb;
+        back = backImage;
         this.button = button;
         this.button.setVisibility(View.VISIBLE);
 
